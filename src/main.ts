@@ -6,6 +6,7 @@ import { open, save, saveAs, setOnDropOpen, getCurrentContent, registerContentGe
 import 'katex/dist/katex.min.css'
 import { isTauri } from './utils/env'
 import { getVersion } from '@tauri-apps/api/app'
+import { listen } from '@tauri-apps/api/event'
 
 const filePathEl = document.getElementById('filePath') as HTMLSpanElement
 const wordCountEl = document.getElementById('wordCount') as HTMLSpanElement
@@ -79,6 +80,9 @@ async function main() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeAbout()
   })
+
+  // Escucha el evento desde el menú nativo para abrir el About
+  listen('open-about', () => openAbout())
 
   // Atajos
   window.addEventListener('keydown', async (e) => {
