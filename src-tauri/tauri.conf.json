@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schema.tauri.app/config/1",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "distDir": "../dist",
+    "devPath": "http://localhost:5173"
+  },
+  "package": {
+    "productName": "PlumaMD",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "windows": [
+      {
+        "title": "PlumaMD",
+        "width": 1280,
+        "height": 800,
+        "resizable": true
+      }
+    ],
+    "bundle": {
+      "active": true,
+      "identifier": "com.juanjo.plumamd",
+      "targets": ["deb", "appimage"],
+      "icon": [
+        "icons/icon.png"
+      ]
+    },
+    "security": {
+      "csp": null
+    },
+    "allowlist": {
+      "fs": {
+        "readFile": true,
+        "writeFile": true,
+        "removeFile": true,
+        "exists": true,
+        "scope": [
+          "$HOME/*",
+          "$DOWNLOAD/*",
+          "$DOCUMENT/*",
+          "$DESKTOP/*",
+          "$TEMP/*"
+        ]
+      },
+      "dialog": {
+        "open": true,
+        "save": true
+      },
+      "shell": {
+        "all": false,
+        "execute": true,
+        "scope": [
+          { "name": "pandoc", "cmd": "pandoc" },
+          { "name": "pandoc_linux", "cmd": "/usr/bin/pandoc" },
+          { "name": "pandoc_win", "cmd": "pandoc.exe" }
+        ]
+      }
+    }
+  }
+}

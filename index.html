@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlumaMD</title>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+  <body>
+    <!-- Sprite de iconos SVG embebido -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+      <symbol id="i-open" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M19 20H5a2 2 0 0 1-2-2V8h2v10h14V8h2v10a2 2 0 0 1-2 2ZM12 4l4 4h-3v6h-2V8H8l4-4Z"/>
+      </symbol>
+      <symbol id="i-save" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M17 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-2-2Zm-5 14a3 3 0 1 1 0-6a3 3 0 0 1 0 6Zm3-9H7V5h8v3Z"/>
+      </symbol>
+      <symbol id="i-saveas" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M5 3h10l4 4v14H5V3Zm10 6H7V5h8v4Zm-4 10a3 3 0 1 0 0-6a3 3 0 0 0 0 6Z"/>
+      </symbol>
+      <symbol id="i-export" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 3l4 4h-3v6h-2V7H8l4-4Zm-7 9h2v7h10v-7h2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7Z"/>
+      </symbol>
+      <symbol id="i-print" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M17 3H7v4h10V3ZM7 17v4h10v-4H7Zm12-8H5a3 3 0 0 0-3 3v5h4v-3h12v3h4v-5a3 3 0 0 0-3-3Z"/>
+      </symbol>
+      <symbol id="i-theme" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 2a10 10 0 1 0 7.07 17.07A8 8 0 0 1 12 2Z"/>
+      </symbol>
+    </svg>
+    <header class="toolbar" role="toolbar" aria-label="Barra de herramientas">
+      <div class="left">
+        <strong class="brand">PlumaMD</strong>
+        <button id="openBtn" class="btn" aria-label="Abrir archivo (Ctrl+O)"><svg class="icon"><use href="#i-open"/></svg><span>Abrir</span></button>
+        <button id="saveBtn" class="btn" aria-label="Guardar (Ctrl+S)"><svg class="icon"><use href="#i-save"/></svg><span>Guardar</span></button>
+        <button id="saveAsBtn" class="btn" aria-label="Guardar como (Ctrl+Shift+S)"><svg class="icon"><use href="#i-saveas"/></svg><span>Guardar como</span></button>
+      </div>
+      <div class="right">
+        <button id="exportHtmlBtn" class="btn btn-primary" aria-label="Exportar a HTML (Ctrl+E)"><svg class="icon"><use href="#i-export"/></svg><span>Exportar</span></button>
+        <button id="printPdfBtn" class="btn btn-primary" aria-label="Imprimir a PDF (Ctrl+P)"><svg class="icon"><use href="#i-print"/></svg><span>PDF</span></button>
+        <label class="theme-select" title="Tema">
+          <span style="font-weight:500">Tema</span>
+          <select id="themeSelect" aria-label="Selector de tema">
+            <option value="system">Sistema</option>
+            <option value="light">Claro</option>
+            <option value="dark">Oscuro</option>
+          </select>
+        </label>
+        <label class="reading-select" title="Modo lectura">
+          <input type="checkbox" id="readingToggle" />
+          <span>Modo lectura</span>
+        </label>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section id="editor" class="pane" aria-label="Editor"></section>
+      <section id="preview" class="pane preview" aria-label="Vista previa"></section>
+    </main>
+
+    <footer class="status" aria-live="polite">
+      <span id="filePath">Sin título</span>
+      <span id="wordCount">0 palabras</span>
+    </footer>
+
+    <script type="module" src="src/main.ts"></script>
+  </body>
+  </html>

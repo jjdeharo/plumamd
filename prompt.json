@@ -1,0 +1,64 @@
+{
+  "titulo": "editor markdown de escritorio con tauri",
+  "rol": "IA de desarrollo con autonomía para tomar decisiones razonables",
+  "objetivo": "Crear un editor Markdown multiplataforma con Tauri (Linux, Windows y macOS) con edición en vivo, vista previa y exportación.",
+  "plataforma": {
+    "contenedor": "Tauri",
+    "frontend": "Vite + TypeScript (puedes usar React o vanilla según convenga)",
+    "backend": "Rust (mínimo viable de Tauri)"
+  },
+  "caracteristicas_clave": [
+    "Edición con CodeMirror 6 o Monaco (elige la opción más simple de integrar).",
+    "Vista previa con markdown-it y soporte de tablas, listas de tareas y notas al pie.",
+    "Fórmulas con KaTeX: inline $...$ y bloque $$...$$.",
+    "Abrir/guardar/guardar como .md con diálogos nativos.",
+    "Arrastrar y soltar .md para abrir.",
+    "Exportar: PDF (impresión nativa), HTML autónomo; si hay pandoc en PATH, también DOCX/EPUB/ODT.",
+    "Selector de tema: sistema (predeterminado), claro y oscuro; persistente en localStorage.",
+    "Layout responsive (dos paneles en escritorio, uno apilado en móvil).",
+    "Atajos: Ctrl+O, Ctrl+S, Ctrl+Shift+S, Ctrl+E (HTML), Ctrl+P (PDF).",
+    "Barra de estado con ruta del archivo y conteo de palabras."
+  ],
+  "requisitos": {
+    "accesibilidad": "foco visible, aria-label en controles y contraste AA.",
+    "seguridad": "whitelist mínima en Tauri; si se usa shell para pandoc, limitar a ese binario.",
+    "sin_telemetria": true
+  },
+  "exportacion": {
+    "pdf_basico": "usar window.print() sobre la vista previa con CSS @media print.",
+    "pandoc_opcional": "detectar pandoc al iniciar; si existe, habilitar DOCX/EPUB/ODT y PDF con xelatex.",
+    "pandoc_wasm_opcional": "si no hay pandoc, considerar pandoc-wasm para DOCX/EPUB/ODT (PDF seguirá por impresión)."
+  },
+  "build": {
+    "linux": ["deb", "appimage"],
+    "windows": ["exe", "msi"],
+    "macos": ["dmg"],
+    "nota": "compila cada SO en su propio entorno; no es obligatorio configurar cross-compile."
+  },
+  "estructura_minima": [
+    "src/index.html, src/main.ts, src/style.css",
+    "src/editor.ts, src/preview.ts, src/theme.ts, src/export.ts",
+    "src-tauri/tauri.conf.json, src-tauri/src/main.rs",
+    "public/katex/* (assets locales)"
+  ],
+  "criterios_aceptacion": [
+    "Abrir/guardar .md funciona con rutas y nombres con acentos.",
+    "La vista previa refleja cambios al teclear con latencia baja.",
+    "PDF por impresión respeta estilos y KaTeX.",
+    "HTML autónomo incluye estilos y KaTeX sin depender de red.",
+    "Si hay pandoc, DOCX abre con ecuaciones editables."
+  ],
+  "tareas_iniciales": [
+    "Inicializar proyecto Tauri con Vite y TypeScript.",
+    "Implementar editor y vista previa con plugins de markdown-it y KaTeX.",
+    "Añadir manejo de archivos y atajos.",
+    "Añadir selector de tema con sistema por defecto y persistencia.",
+    "Añadir exportar a HTML y PDF; detección de pandoc para formatos extra.",
+    "Configurar empaquetado para Linux y Windows."
+  ],
+  "entregables": [
+    "Repositorio con README (instalación, uso y build).",
+    "Paquetes de salida en dist/ para Linux y Windows.",
+    "Archivo ejemplo.md con tablas, tareas y fórmulas."
+  ]
+}
