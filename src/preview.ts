@@ -27,6 +27,7 @@ export function renderMarkdown(src: string) {
     USE_PROFILES: { html: true, svg: true, mathMl: true },
     ADD_ATTR: ['class', 'style'],
     ALLOWED_TAGS: ['span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'a', 'strong', 'em', 'code', 'pre', 'blockquote', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'hr', 'img'],
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|file|data):|[^a-z]|[a-z+.-]+(?:[^a-z+.-]|$))/i,
     KEEP_CONTENT: true
   } as any)
   container.innerHTML = clean
@@ -38,6 +39,7 @@ export function renderToHtml(src: string) {
     USE_PROFILES: { html: true, svg: true, mathMl: true },
     ADD_ATTR: ['class', 'style'],
     ALLOWED_TAGS: ['span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'a', 'strong', 'em', 'code', 'pre', 'blockquote', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'hr', 'img'],
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|file|data):|[^a-z]|[a-z+.-]+(?:[^a-z+.-]|$))/i,
     KEEP_CONTENT: true
   } as any)
   return clean

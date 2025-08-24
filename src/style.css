@@ -90,6 +90,9 @@ html, body {
   top: 0;
   z-index: 100;
   backdrop-filter: blur(10px);
+  flex-wrap: wrap;           /* Permite que pase a varias filas */
+  row-gap: var(--spacing-sm);
+  overflow-x: auto;          /* Fallback: scroll horizontal si aún no cabe */
 }
 
 .toolbar .left,
@@ -97,6 +100,8 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  flex-wrap: wrap;           /* Los botones también pueden saltar de línea */
+  min-width: 0;
 }
 
 /* Botones modernos */
@@ -121,6 +126,12 @@ button {
   align-items: center;
   gap: var(--spacing-xs);
   min-height: 36px;
+}
+.divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--border-light);
+  margin: 0 var(--spacing-xs);
 }
 .btn:hover,
 button:hover {
@@ -155,6 +166,20 @@ button:active {
   width: 18px;
   height: 18px;
   display: inline-block;
+}
+
+/* En pantallas medianas, oculta texto de botones y deja solo iconos */
+@media (max-width: 1200px) {
+  .btn span { display: none; }
+  .btn.keep-label span { display: inline; }
+  .btn { padding: var(--spacing-xs) var(--spacing-sm); }
+}
+
+/* En pantallas pequeñas, apilar izquierda/derecha y compactar */
+@media (max-width: 900px) {
+  .toolbar { padding: var(--spacing-sm) var(--spacing-md); }
+  .toolbar .left, .toolbar .right { gap: var(--spacing-xs); }
+  .theme-select select { min-width: 0; }
 }
 
 /* Selector de tema elegante */
@@ -469,6 +494,9 @@ button:active {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 0;
+  max-height: 85vh;            /* Evitar que se salga de pantalla */
+  display: flex;
+  flex-direction: column;
 }
 .modal-header {
   display: flex;
@@ -479,12 +507,21 @@ button:active {
 }
 .modal-body {
   padding: var(--spacing-lg);
+  overflow: auto;              /* Scroll interno si el contenido crece */
 }
 .modal .close {
   background: transparent;
   border: 1px solid var(--border-light);
 }
 .muted { color: var(--text-secondary); }
+
+/* Evitar desbordes horizontales en instrucciones dentro de modales */
+.modal-body pre,
+.modal-body code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-width: 100%;
+}
 
 /* Scrollbars personalizadas */
 ::-webkit-scrollbar {

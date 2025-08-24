@@ -2,6 +2,12 @@
 
 Editor Markdown de escritorio (Linux/Windows/macOS) con Tauri, Vite y TypeScript. Incluye edición con CodeMirror 6, vista previa con markdown-it y KaTeX, apertura/guardado con diálogos nativos, atajos y exportación básica.
 
+## Instalación
+- Descargas: https://github.com/jjdeharo/plumamd/releases/latest
+- Windows: descarga el `.msi` y sigue el instalador.
+- macOS: descarga el `.dmg`, arrastra a Aplicaciones (puede requerir permitir en Seguridad y privacidad).
+- Linux: descarga `.AppImage` (hazlo ejecutable) o `.deb` para Debian/Ubuntu/Zorin.
+
 ## Requisitos (Zorin OS/Ubuntu/Debian)
 - Node.js 18+ y npm
 - Rust y toolchain (instalar con `curl https://sh.rustup.rs -sSf | sh`)
@@ -18,6 +24,11 @@ Editor Markdown de escritorio (Linux/Windows/macOS) con Tauri, Vite y TypeScript
 
 ## Build
 - Generar binarios: `npm run tauri:build`
+
+### Publicar nueva versión (CI)
+1. Actualiza versión si procede.
+2. Etiqueta y sube: `git tag vX.Y.Z && git push origin vX.Y.Z`
+3. GitHub Actions construirá para Linux/Windows/macOS y publicará en Releases.
 
 ## Atajos
 - `Ctrl+O`: Abrir

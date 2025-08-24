@@ -1,13 +1,10 @@
 import { defineConfig } from 'vite'
+import pkg from './package.json' assert { type: 'json' }
 
 export default defineConfig({
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true
-  },
-  server: {
-    host: '127.0.0.1',
-    port: 5173,
-    strictPort: true
+  // Rutas relativas para funcionar bajo /<usuario>.github.io/<repo>/
+  base: './',
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version)
   }
 })
