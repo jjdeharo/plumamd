@@ -163,21 +163,59 @@ async function main() {
 
   async function updateReleaseLinks() {
     const primary = document.getElementById('downloadPrimary') as HTMLAnchorElement | null
+    const info = document.getElementById('releaseInfo') as HTMLParagraphElement | null
     const allLink = Array.from(document.querySelectorAll('a'))
       .find(a => a.textContent?.toLowerCase().includes('ver todas las descargas')) as HTMLAnchorElement | null
     const baseLatest = 'https://github.com/jjdeharo/plumamd/releases/latest'
     if (primary) primary.href = baseLatest
     if (allLink) allLink.href = baseLatest
-    try {
-      const res = await fetch('https://api.github.com/repos/jjdeharo/plumamd/releases/latest', { headers: { 'Accept': 'application/vnd.github+json' } })
-      if (!res.ok) return
-      const data = await res.json()
-      const osName = (document.getElementById('osDetected')?.textContent || 'tu sistema')
-      const url = pickAssetForOS(osName, data.assets || [])
-      if (primary && url) primary.href = url
-      if (allLink && data.html_url) allLink.href = data.html_url
-    } catch {
-      // Silencioso: dejamos enlaces a /latest
+    if (info) info.textContent = 'Buscando última versión…'
+
+    type Rel = { draft: boolean; prerelease: boolean; html_url: string; tag_name: string; name?: string; assets: any[]; created_at: string }
+    const fetchJson = async <T>(url: string): Promise<T | null> => {
+      try {
+        const r = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } })
+        if (!r.ok) return null
+        return (await r.json()) as T
+      } catch { return null }
+    }
+
+    const osName = (document.getElementById('osDetected')?.textContent || 'tu sistema')
+
+    // 1) Intenta última estable
+    let rel: Rel | null = await fetchJson<Rel>('https://api.github.com/repos/jjdeharo/plumamd/releases/latest')
+    let usedPrerelease = false
+
+    // 2) Si no hay estable, toma la más reciente (incluidas prerelease)
+    if (!rel) {
+      const list = await fetchJson<Rel[]>('https://api.github.com/repos/jjdeharo/plumamd/releases?per_page=10')
+      if (list && list.length) {
+        // Prioriza estables; si no hay, coge la primera no draft
+        const stable = list.filter(r => !r.draft && !r.prerelease)
+          .sort((a,b) => +new Date(b.created_at) - +new Date(a.created_at))
+        rel = (stable[0] ?? null)
+        if (!rel) {
+          const nonDraft = list.filter(r => !r.draft)
+            .sort((a,b) => +new Date(b.created_at) - +new Date(a.created_at))
+          rel = nonDraft[0] ?? null
+          usedPrerelease = !!rel?.prerelease
+        }
+      }
+    }
+
+    if (!rel) {
+      if (info) info.textContent = 'No se pudo obtener la última versión. Usa “Ver todas las descargas”.'
+      return
+    }
+
+    const url = pickAssetForOS(osName, rel.assets || [])
+    if (primary && url) primary.href = url
+    if (allLink && rel.html_url) allLink.href = rel.html_url
+    if (info) {
+      const ver = rel.tag_name || rel.name || 'desconocida'
+      info.textContent = usedPrerelease || rel.prerelease
+        ? `Versión detectada: ${ver} (pre-release)`
+        : `Versión estable: ${ver}`
     }
   }
 
