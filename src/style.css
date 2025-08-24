@@ -446,6 +446,46 @@ button:active {
   min-height: 40px;
 }
 
+/* Modal genérico */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+}
+.modal.open { display: block; }
+.modal .backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(2px);
+}
+.modal .modal-content {
+  position: relative;
+  max-width: 720px;
+  margin: 8vh auto;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 0;
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-light);
+}
+.modal-body {
+  padding: var(--spacing-lg);
+}
+.modal .close {
+  background: transparent;
+  border: 1px solid var(--border-light);
+}
+.muted { color: var(--text-secondary); }
+
 /* Scrollbars personalizadas */
 ::-webkit-scrollbar {
   width: 8px;

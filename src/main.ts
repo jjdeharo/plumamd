@@ -5,6 +5,7 @@ import { exportAsHtml, printToPdf } from './export'
 import { open, save, saveAs, setOnDropOpen, getCurrentContent, registerContentGetter } from './storage'
 import 'katex/dist/katex.min.css'
 import { isTauri } from './utils/env'
+import { getVersion } from '@tauri-apps/api/app'
 
 const filePathEl = document.getElementById('filePath') as HTMLSpanElement
 const wordCountEl = document.getElementById('wordCount') as HTMLSpanElement
@@ -51,6 +52,32 @@ async function main() {
 
   document.getElementById('printPdfBtn')?.addEventListener('click', () => {
     printToPdf()
+  })
+
+  // Acerca de
+  const aboutBtn = document.getElementById('aboutBtn')
+  const aboutModal = document.getElementById('aboutModal')!
+  const aboutClose = document.getElementById('aboutClose')
+  const appVersionEl = document.getElementById('appVersion')!
+  const openAbout = async () => {
+    try {
+      const v = isTauri ? await getVersion() : (import.meta.env?.VITE_APP_VERSION ?? 'dev')
+      appVersionEl.textContent = v
+    } catch {
+      appVersionEl.textContent = 'dev'
+    }
+    aboutModal.classList.add('open')
+    aboutModal.setAttribute('aria-hidden', 'false')
+  }
+  const closeAbout = () => {
+    aboutModal.classList.remove('open')
+    aboutModal.setAttribute('aria-hidden', 'true')
+  }
+  aboutBtn?.addEventListener('click', openAbout)
+  aboutClose?.addEventListener('click', closeAbout)
+  aboutModal.querySelector('.backdrop')?.addEventListener('click', closeAbout)
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAbout()
   })
 
   // Atajos
