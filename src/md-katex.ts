@@ -36,8 +36,8 @@ export default function mdKatex(md: MarkdownIt) {
     return true
   })
 
-  // Inline \(...\)
-  md.inline.ruler.after('math_inline', 'math_inline_paren', (state, silent) => {
+  // Inline \(...\) — debe ejecutarse ANTES de 'escape' para que no se coma el \\
+  md.inline.ruler.before('escape', 'math_inline_paren', (state, silent) => {
     const src = state.src
     const pos = state.pos
     // Starts with \(

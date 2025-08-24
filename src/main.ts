@@ -52,7 +52,7 @@ async function main() {
   })
 
   document.getElementById('printPdfBtn')?.addEventListener('click', () => {
-    printToPdf()
+    printToPdf(getCurrentContent())
   })
 
   // Acerca de
@@ -110,7 +110,7 @@ async function main() {
     }
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'p') {
       e.preventDefault()
-      printToPdf()
+      printToPdf(getCurrentContent())
     }
   })
 
