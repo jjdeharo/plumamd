@@ -41,6 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tauriScript: 'tauri:build'
+          args: ''
           tagName: ${{ github.ref_name }}
           releaseName: PlumaMD ${{ github.ref_name }}
           releaseBody: 'Version ${{ github.ref_name }} generada automáticamente.'
