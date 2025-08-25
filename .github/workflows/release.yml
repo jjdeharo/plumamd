@@ -2,6 +2,10 @@ name: Tauri Release
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag a construir (ej: v0.1.7-beta.1)'
+        required: true
   push:
     tags:
       - 'v*.*.*'
@@ -12,8 +16,19 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Definir tag objetivo
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "RELEASE_TAG=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "RELEASE_TAG=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.vars.outputs.RELEASE_TAG }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -38,8 +53,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tauriScript: 'tauri:build'
-          tagName: ${{ github.ref_name }}
-          releaseName: PlumaMD ${{ github.ref_name }}
-          releaseBody: 'Version ${{ github.ref_name }} generada automáticamente.'
+          tagName: ${{ steps.vars.outputs.RELEASE_TAG }}
+          releaseName: PlumaMD ${{ steps.vars.outputs.RELEASE_TAG }}
+          releaseBody: 'Version ${{ steps.vars.outputs.RELEASE_TAG }} generada automáticamente.'
           releaseDraft: false
-          prerelease: ${{ contains(github.ref_name, '-') }}
+          prerelease: ${{ contains(steps.vars.outputs.RELEASE_TAG, '-') }}
