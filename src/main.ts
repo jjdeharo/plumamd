@@ -2,6 +2,7 @@ import { setupEditor, formatBold, formatItalic, formatCodeInline, insertCodeBloc
 import { setupPreview, renderMarkdown } from './preview'
 import { applyInitialTheme, setupThemeToggle } from './theme'
 import { exportAsHtml, printToPdf } from './export'
+import { detectPandoc, exportWithPandoc } from './pandoc'
 import { open, save, saveAs, setOnDropOpen, getCurrentContent, registerContentGetter } from './storage'
 import 'katex/dist/katex.min.css'
 import { isTauri } from './utils/env'
@@ -70,6 +71,21 @@ async function main() {
   document.getElementById('printPdfBtn')?.addEventListener('click', () => {
     printToPdf(getCurrentContent())
   })
+
+  // Pandoc: detección y handlers
+  const pandocCmd = await detectPandoc()
+  const btnDocx = document.getElementById('exportDocxBtn')
+  const btnOdt = document.getElementById('exportOdtBtn')
+  const btnEpub = document.getElementById('exportEpubBtn')
+  const btnPdfPandoc = document.getElementById('exportPdfPandocBtn')
+  const showPandoc = !!pandocCmd
+  ;[btnDocx, btnOdt, btnEpub, btnPdfPandoc].forEach(b => { if (b) b.classList.toggle('hidden', !showPandoc) })
+  if (pandocCmd) {
+    btnDocx?.addEventListener('click', async () => { await exportWithPandoc(getCurrentContent(), 'docx', pandocCmd) })
+    btnOdt?.addEventListener('click', async () => { await exportWithPandoc(getCurrentContent(), 'odt', pandocCmd) })
+    btnEpub?.addEventListener('click', async () => { await exportWithPandoc(getCurrentContent(), 'epub', pandocCmd) })
+    btnPdfPandoc?.addEventListener('click', async () => { await exportWithPandoc(getCurrentContent(), 'pdf', pandocCmd) })
+  }
 
   // Acerca de
   const aboutBtn = document.getElementById('aboutBtn')
@@ -247,6 +263,12 @@ async function main() {
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'e') {
       e.preventDefault()
       await exportAsHtml(getCurrentContent())
+    }
+    // Atajo alternativo para PDF con Pandoc: Ctrl+Shift+P
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
+      e.preventDefault()
+      const pc = await detectPandoc()
+      if (pc) await exportWithPandoc(getCurrentContent(), 'pdf', pc)
     }
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'p') {
       e.preventDefault()

@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages (disabled by default)
 
 on:
-  push:
-    branches: [ main ]
+  # Deshabilitado en pushes para evitar conflicto con gh-pages por rama.
+  # Ejecutar manualmente si se quiere probar este método.
   workflow_dispatch:
 
 permissions:
