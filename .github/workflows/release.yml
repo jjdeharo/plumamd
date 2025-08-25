@@ -8,11 +8,7 @@ on:
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
@@ -26,7 +22,6 @@ jobs:
           cache: npm
 
       - name: Install Linux dependencies
-        if: matrix.os == 'ubuntu-latest'
         run: |
           set -euxo pipefail
           sudo apt-get update
@@ -47,4 +42,4 @@ jobs:
           releaseName: PlumaMD ${{ github.ref_name }}
           releaseBody: 'Version ${{ github.ref_name }} generada automáticamente.'
           releaseDraft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
