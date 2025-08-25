@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -40,8 +40,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tauriScript: 'tauri:build'
-          args: ''
+          tauriScript: 'tauri'
+          args: 'build'
           tagName: ${{ github.ref_name }}
           releaseName: PlumaMD ${{ github.ref_name }}
           releaseBody: 'Version ${{ github.ref_name }} generada automáticamente.'
