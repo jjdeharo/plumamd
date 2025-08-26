@@ -42,7 +42,14 @@ export function setupEditor(onChange: (content: string) => void) {
       }),
       EditorView.theme({
         '&': { height: '100%' },
-        '.cm-content': { fontFamily: 'ui-monospace, monospace', fontSize: '14px' }
+        '.cm-scroller': { overflowX: 'hidden' },
+        '.cm-content': {
+          fontFamily: 'ui-monospace, monospace',
+          fontSize: '14px',
+          whiteSpace: 'pre-wrap',
+          overflowWrap: 'break-word',
+          wordBreak: 'break-word'
+        }
       })
     ]
   })
