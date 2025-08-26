@@ -275,6 +275,20 @@ button:active {
   padding: var(--spacing-lg) !important;
 }
 
+# Evitar desbordes horizontales y forzar wrapping dentro del editor
+# Aplicamos reglas con mayor especificidad y !important para sobreescribir
+# estilos internos de CodeMirror que pueden forzar no-wrap en `.cm-line`.
+# No forzamos wrapping en bloques de código detectables por clases adicionales
+# para preservar el comportamiento en `````` si se desea más tarde.
+# Por ahora aplicamos wrapping general para evitar overflow.
+#
+#editor .cm-scroller { overflow-x: hidden !important; }
+#editor .cm-content, #editor .cm-line {
+#  white-space: pre-wrap !important;
+#  overflow-wrap: break-word !important;
+#  word-break: break-word !important;
+#}
+
 #editor .cm-line {
   padding: 2px 0 !important;
 }
