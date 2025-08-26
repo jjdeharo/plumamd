@@ -476,6 +476,7 @@ button:active {
   position: fixed;
   inset: 0;
   display: none;
+  z-index: 1000;              /* Por encima de la toolbar (z=100) */
 }
 .modal.open { display: block; }
 .modal .backdrop {

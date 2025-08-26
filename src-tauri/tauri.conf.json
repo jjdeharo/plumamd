@@ -21,6 +21,7 @@
     ],
     "bundle": {
       "active": true,
+      "targets": ["appimage", "deb"],
       "identifier": "com.juanjo.plumamd",
       "icon": [
         "icons/icon.png"
@@ -36,11 +37,7 @@
         "removeFile": true,
         "exists": true,
         "scope": [
-          "$HOME/*",
-          "$DOWNLOAD/*",
-          "$DOCUMENT/*",
-          "$DESKTOP/*",
-          "$TEMP/*"
+          "**"
         ]
       },
       "dialog": {
@@ -49,12 +46,8 @@
       },
       "shell": {
         "all": false,
-        "execute": true,
-        "scope": [
-          { "name": "pandoc", "cmd": "pandoc" },
-          { "name": "pandoc_linux", "cmd": "/usr/bin/pandoc" },
-          { "name": "pandoc_win", "cmd": "pandoc.exe" }
-        ]
+        "execute": false,
+        "scope": []
       }
     }
   }

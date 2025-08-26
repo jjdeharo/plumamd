@@ -2,12 +2,12 @@ import { setupEditor, formatBold, formatItalic, formatCodeInline, insertCodeBloc
 import { setupPreview, renderMarkdown } from './preview'
 import { applyInitialTheme, setupThemeToggle } from './theme'
 import { exportAsHtml, printToPdf } from './export'
-import { detectPandoc, exportWithPandoc } from './pandoc'
-import { open, save, saveAs, setOnDropOpen, getCurrentContent, registerContentGetter } from './storage'
+import { open, save, saveAs, setOnDropOpen, getCurrentContent, registerContentGetter, openFromPath } from './storage'
 import 'katex/dist/katex.min.css'
 import { isTauri } from './utils/env'
 import { getVersion } from '@tauri-apps/api/app'
 import { listen } from '@tauri-apps/api/event'
+import { invoke } from '@tauri-apps/api/tauri'
 import { open as openExternal } from '@tauri-apps/api/shell'
 
 const filePathEl = document.getElementById('filePath') as HTMLSpanElement
@@ -72,20 +72,7 @@ async function main() {
     printToPdf(getCurrentContent())
   })
 
-  // Pandoc: detección y handlers
-  const pandocCmd = await detectPandoc()
-  const btnDocx = document.getElementById('exportDocxBtn')
-  const btnOdt = document.getElementById('exportOdtBtn')
-  const btnEpub = document.getElementById('exportEpubBtn')
-  const btnPdfPandoc = document.getElementById('exportPdfPandocBtn')
-  const showPandoc = !!pandocCmd
-  ;[btnDocx, btnOdt, btnEpub, btnPdfPandoc].forEach(b => { if (b) b.classList.toggle('hidden', !showPandoc) })
-  if (pandocCmd) {
-    btnDocx?.addEventListener('click', async () => { await exportWithPandoc(getCurrentContent(), 'docx', pandocCmd) })
-    btnOdt?.addEventListener('click', async () => { await exportWithPandoc(getCurrentContent(), 'odt', pandocCmd) })
-    btnEpub?.addEventListener('click', async () => { await exportWithPandoc(getCurrentContent(), 'epub', pandocCmd) })
-    btnPdfPandoc?.addEventListener('click', async () => { await exportWithPandoc(getCurrentContent(), 'pdf', pandocCmd) })
-  }
+  // Exportaciones: HTML y PDF por impresión
 
   // Acerca de
   const aboutBtn = document.getElementById('aboutBtn')
@@ -121,7 +108,7 @@ async function main() {
     if (!downloadModal) return
     downloadModal.classList.add('open')
     downloadModal.setAttribute('aria-hidden', 'false')
-    // Actualizar enlaces según SO y última release de GitHub
+    // Actualizar enlaces para Linux con la última release de GitHub
     updateReleaseLinks()
   }
   const closeDownloads = () => {
@@ -135,22 +122,45 @@ async function main() {
   downloadClose?.addEventListener('click', closeDownloads)
   downloadModal?.querySelector('.backdrop')?.addEventListener('click', closeDownloads)
 
-  // Detección simple de sistema para el modal de descargas
-  const osDetectedEl = document.getElementById('osDetected')
-  const osLabelEl = document.getElementById('osLabel')
-  const detectOS = () => {
-    const ua = navigator.userAgent || ''
-    if (/Windows/i.test(ua)) return 'Windows'
-    if (/Macintosh|Mac OS X/i.test(ua)) return 'macOS'
-    if (/Linux|X11/i.test(ua)) return 'Linux'
-    return 'tu sistema'
-  }
-  const osName = detectOS()
-  if (osDetectedEl) osDetectedEl.textContent = osName
-  if (osLabelEl) osLabelEl.textContent = osName
+  // Modal de descargas enfocado exclusivamente a Linux
 
   // Abrir enlaces externos en el navegador cuando corremos en Tauri
   if (isTauri()) {
+    // Registrar listener para abrir archivos enviados desde el backend
+    // lo antes posible para no perder eventos emitidos durante el "page load".
+    try {
+      listen<string>('open-file', async (event) => {
+        const arg = String(event.payload || '')
+        if (!arg) return
+        try {
+          const res = await openFromPath(arg)
+          if (res) {
+            editor.set(res.content)
+            filePathEl.textContent = res.path || 'Sin título'
+          }
+        } catch {
+          // Silenciar errores para no romper la app si llega algo inesperado
+        }
+      })
+    } catch {}
+
+    // Cargar archivo pasado por argumentos al iniciar (robusto frente a timing)
+    try {
+      const args = await invoke<string[]>('initial_args')
+      if (Array.isArray(args)) {
+        for (const arg of args) {
+          if (!arg) continue
+          try {
+            const res = await openFromPath(String(arg))
+            if (res) {
+              editor.set(res.content)
+              filePathEl.textContent = res.path || 'Sin título'
+            }
+          } catch {}
+        }
+      }
+    } catch {}
+
     const externalLinks = Array.from(document.querySelectorAll('a[target="_blank"]')) as HTMLAnchorElement[]
     externalLinks.forEach((a) => {
       a.addEventListener('click', (ev) => {
@@ -160,21 +170,11 @@ async function main() {
     })
   }
 
-  // Resuelve el mejor asset para el SO detectado
-  function pickAssetForOS(os: string, assets: any[]): string | null {
+  // Selecciona el mejor asset para Linux
+  function pickLinuxAsset(assets: any[]): string | null {
     const names = assets.map((a: any) => ({ name: String(a.name || ''), url: String(a.browser_download_url || '') }))
     const by = (pattern: RegExp) => names.find(n => pattern.test(n.name))?.url || null
-    if (os === 'Windows') {
-      return by(/\.msi$/i) || by(/\.exe$/i)
-    }
-    if (os === 'macOS') {
-      // Prefer universal/arm dmg
-      return by(/universal.*\.dmg$/i) || by(/arm64.*\.dmg$/i) || by(/x64.*\.dmg$/i) || by(/\.dmg$/i)
-    }
-    if (os === 'Linux') {
-      return by(/\.AppImage$/i) || by(/\.deb$/i) || by(/\.rpm$/i)
-    }
-    return null
+    return by(/\.AppImage$/i) || by(/\.deb$/i) || by(/\.rpm$/i)
   }
 
   async function updateReleaseLinks() {
@@ -195,8 +195,6 @@ async function main() {
         return (await r.json()) as T
       } catch { return null }
     }
-
-    const osName = (document.getElementById('osDetected')?.textContent || 'tu sistema')
 
     // 1) Intenta última estable
     let rel: Rel | null = await fetchJson<Rel>('https://api.github.com/repos/jjdeharo/plumamd/releases/latest')
@@ -224,7 +222,7 @@ async function main() {
       return
     }
 
-    const url = pickAssetForOS(osName, rel.assets || [])
+    const url = pickLinuxAsset(rel.assets || [])
     if (primary && url) primary.href = url
     if (allLink && rel.html_url) allLink.href = rel.html_url
     if (info) {
@@ -263,12 +261,6 @@ async function main() {
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'e') {
       e.preventDefault()
       await exportAsHtml(getCurrentContent())
-    }
-    // Atajo alternativo para PDF con Pandoc: Ctrl+Shift+P
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
-      e.preventDefault()
-      const pc = await detectPandoc()
-      if (pc) await exportWithPandoc(getCurrentContent(), 'pdf', pc)
     }
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'p') {
       e.preventDefault()

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=PlumaMD
+Comment=Editor Markdown con vista previa
+Exec=pluma-md %f
+Icon=icon
+Terminal=false
+Categories=Office;TextEditor;
+MimeType=text/markdown;text/x-markdown;

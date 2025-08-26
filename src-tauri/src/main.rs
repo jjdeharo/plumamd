@@ -1,6 +1,9 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
 use tauri::{CustomMenuItem, Menu, Submenu, Manager};
+
+#[tauri::command]
+fn initial_args() -> Vec<String> {
+  std::env::args().skip(1).collect()
+}
 
 fn main() {
   // Menú de la aplicación con entrada "Acerca de"
@@ -14,6 +17,21 @@ fn main() {
 
   tauri::Builder::default()
     .menu(app_menu)
+    // Emite los archivos abiertos cuando la vista está cargada,
+    // para no perder el evento antes de que el frontend escuche.
+    .on_page_load(|window, _payload| {
+      let args: Vec<String> = std::env::args().skip(1).collect();
+      if !args.is_empty() {
+        for arg in args {
+          let _ = window.emit("open-file", arg);
+        }
+      }
+    })
+    .invoke_handler(tauri::generate_handler![initial_args])
+    .setup(|_app| {
+      // Setup general sin emisión de eventos temprana
+      Ok(())
+    })
     .on_menu_event(|event| {
       match event.menu_item_id() {
         "about" => {

@@ -1,12 +1,16 @@
 # PlumaMD
 
-Editor Markdown de escritorio (Linux/Windows/macOS) con Tauri, Vite y TypeScript. Incluye edición con CodeMirror 6, vista previa con markdown-it y KaTeX, apertura/guardado con diálogos nativos, atajos y exportación básica.
+Editor Markdown de escritorio para Linux con Tauri, Vite y TypeScript. Incluye edición con CodeMirror 6, vista previa con markdown-it y KaTeX, apertura/guardado con diálogos nativos, atajos y exportación básica.
 
-## Instalación
+Aviso: soporte exclusivo para Linux. No se ofrece soporte para Windows ni macOS.
+
+## Instalación (Linux)
 - Descargas: https://github.com/jjdeharo/plumamd/releases/latest
-- Windows: descarga el `.msi` y sigue el instalador.
-- macOS: descarga el `.dmg`, arrastra a Aplicaciones (puede requerir permitir en Seguridad y privacidad).
-- Linux: descarga `.AppImage` (hazlo ejecutable) o `.deb` para Debian/Ubuntu/Zorin.
+- Opción 1 (recomendada por portabilidad): `.AppImage`
+  - Hazlo ejecutable: `chmod +x PlumaMD*.AppImage`
+  - Ejecuta: `./PlumaMD*.AppImage`
+- Opción 2 (integración en sistema): paquete `.deb` para Ubuntu/Zorin/Debian
+  - Instala: `sudo apt install ./plumamd_*_amd64.deb`
 
 ## Requisitos (Zorin OS/Ubuntu/Debian)
 - Node.js 18+ y npm
@@ -23,12 +27,15 @@ Editor Markdown de escritorio (Linux/Windows/macOS) con Tauri, Vite y TypeScript
   - Seguridad dev: el servidor Vite queda enlazado a `127.0.0.1`.
 
 ## Build
-- Generar binarios: `npm run tauri:build`
+- Generar AppImage y .deb: `npm run tauri:build`
+  - Artefactos locales:
+    - AppImage: `src-tauri/target/release/bundle/appimage/PlumaMD_*_amd64.AppImage`
+    - Deb: `src-tauri/target/release/bundle/deb/plumamd_*_amd64.deb`
 
 ### Publicar nueva versión (CI)
 1. Actualiza versión si procede.
 2. Etiqueta y sube: `git tag vX.Y.Z && git push origin vX.Y.Z`
-3. GitHub Actions construirá para Linux/Windows/macOS y publicará en Releases.
+3. GitHub Actions construirá para Linux (AppImage y .deb) y publicará en Releases.
 
 ## Atajos
 - `Ctrl+O`: Abrir
@@ -41,13 +48,9 @@ Editor Markdown de escritorio (Linux/Windows/macOS) con Tauri, Vite y TypeScript
 - Editor y vista previa funcionando con KaTeX, tareas y notas al pie.
 - Abrir/guardar/arrastrar-soltar funcionando.
 - Exportar HTML offline: el HTML exportado incluye estilos y fuentes de KaTeX incrustadas (archivo único, 100% offline).
-- Exportar con pandoc (si está instalado): DOCX/EPUB/ODT y PDF con XeLaTeX.
- - Sanitización: el HTML renderizado y exportado se sanea con DOMPurify (MathML permitido). Se sustituyó `markdown-it-katex` por un plugin local seguro basado en KaTeX.
+- Sanitización: el HTML renderizado y exportado se sanea con DOMPurify (MathML permitido). Se sustituyó `markdown-it-katex` por un plugin local seguro basado en KaTeX.
 
-## Pandoc (opcional)
-- Instalar: `sudo apt install pandoc`
-- PDF avanzado: `sudo apt install texlive-xetex`
-- Si `pandoc` está disponible en PATH, aparecerán botones para DOCX/EPUB/ODT y PDF (XeLaTeX).
+ 
 
 ## Pendiente / Próximos pasos
 - Incrustar fuentes de KaTeX en el HTML exportado (actualmente usa tipografías del sistema).

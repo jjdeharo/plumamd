@@ -36,6 +36,20 @@ export async function open() {
   }
 }
 
+// Abre directamente desde una ruta del sistema (p.ej. pasada por el SO)
+export async function openFromPath(path: string) {
+  // Normaliza posibles URLs tipo file://...
+  const normalized = path.startsWith('file://')
+    ? decodeURIComponent(new URL(path).pathname)
+    : path
+  if (isTauri()) {
+    const content = await readTextFile(normalized)
+    currentPath = normalized
+    return { path: currentPath, content }
+  }
+  return null
+}
+
 export async function save(content?: string, dataUrl?: string, htmlExport = false) {
   if (isTauri()) {
     if (htmlExport) {

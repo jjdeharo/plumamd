@@ -4,8 +4,8 @@ import { renderToHtml } from './preview'
 import katexCssRaw from 'katex/dist/katex.min.css?raw'
 
 async function embedKatexFonts(css: string): Promise<string> {
-  // Cargamos las fuentes de KaTeX directamente desde node_modules (ruta relativa desde src)
-  const fontUrlMap = import.meta.glob('../node_modules/katex/dist/fonts/*.woff2', { query: '?url', import: 'default', eager: true }) as Record<string, string>
+  // Cargamos las fuentes de KaTeX como URLs (Vite) desde el paquete
+  const fontUrlMap = import.meta.glob('./katex/dist/fonts/*.woff2', { query: '?url', import: 'default', eager: true }) as Record<string, string>
   const entries: Array<[string, string]> = []
   for (const [path, url] of Object.entries(fontUrlMap)) {
     try {
