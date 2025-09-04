@@ -6,6 +6,7 @@ import { open as openDialog } from '@tauri-apps/api/dialog'
 import { readBinaryFile } from '@tauri-apps/api/fs'
 import { markdown } from '@codemirror/lang-markdown'
 import { basicSetup } from 'codemirror'
+import { searchKeymap, openSearchPanel, highlightSelectionMatches } from '@codemirror/search'
 
 let view: EditorView | null = null
 
@@ -19,6 +20,8 @@ export function setupEditor(onChange: (content: string) => void) {
     { key: 'Mod-`', preventDefault: true, run: () => { formatCodeInline(); return true } },
     { key: 'Mod-Shift-c', preventDefault: true, run: () => { insertCodeBlock(); return true } },
     { key: 'Mod-k', preventDefault: true, run: () => { insertLink(); return true } },
+    // Asegura que Ctrl/Cmd+F abre el panel de búsqueda dentro del editor
+    { key: 'Mod-f', preventDefault: true, run: () => { if (view) return openSearchPanel(view); return false } },
     { key: 'Mod-Alt-1', preventDefault: true, run: () => { setHeading(1); return true } },
     { key: 'Mod-Alt-2', preventDefault: true, run: () => { setHeading(2); return true } },
     { key: 'Mod-Alt-3', preventDefault: true, run: () => { setHeading(3); return true } },
@@ -34,9 +37,13 @@ export function setupEditor(onChange: (content: string) => void) {
     doc: startDoc,
     extensions: [
       basicSetup,
+      // Habilita el ajuste de línea para evitar desbordes horizontales
+      EditorView.lineWrapping,
       history(),
       markdown(),
-      keymap.of([...defaultKeymap, ...historyKeymap, ...customBindings]),
+      // Resaltado de coincidencias y keymap de búsqueda
+      highlightSelectionMatches(),
+      keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap, ...customBindings]),
       EditorView.updateListener.of((v: ViewUpdate) => {
         if (v.docChanged) onChange(v.state.doc.toString())
       }),
@@ -68,6 +75,9 @@ export function setupEditor(onChange: (content: string) => void) {
     },
     get() {
       return view?.state.doc.toString() ?? ''
+    },
+    openSearch() {
+      if (view) openSearchPanel(view)
     }
   }
 }
@@ -219,3 +229,10 @@ export function insertBlockMath() {
 export function undo() { if (view) cmUndo(view) }
 export function redo() { if (view) cmRedo(view) }
 export function focusEditor() { view?.focus() }
+
+export function openSearchInEditor() {
+  if (view) {
+    openSearchPanel(view)
+    view.focus()
+  }
+}

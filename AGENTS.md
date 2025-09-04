@@ -35,3 +35,11 @@
 ## Security & Configuration Tips
 - Dependencias del sistema para Tauri en Debian/Ubuntu/Zorin: ver sección “Requisitos” en `README.md`.
 - Sanitiza HTML siempre (el proyecto usa DOMPurify). Evita introducir plugins que ejecuten código arbitrario en la vista previa.
+
+## Contexto persistente del asistente
+- Fuente: `docs/assistant-context.md`.
+- Lectura automática: el asistente debe leer este archivo al inicio de cada sesión, tras cerrar y volver a entrar en la sesión gráfica (o reiniciar), y también cuando detecte que se ha trabajado en áreas sensibles (packaging/instalación, .desktop/iconos, integraciones con el sistema) sin necesidad de que el usuario lo pida.
+- Actualización proactiva: además de cuando el usuario pida “añade al contexto persistente: …”, el asistente añadirá de forma autónoma un registro fechado cuando tome decisiones relevantes, cambie configuraciones, resuelva incidencias o establezca próximos pasos que sea útil recordar en el futuro.
+- Objetivo: mantener decisiones (nombres, WMClass, rutas de iconos, flujo de build/packaging) y estado reciente para no perder continuidad entre sesiones.
+- Formato: entradas concisas, fechadas, con “situación → acción → resultado → siguientes pasos”.
+- Transparencia: tras cada actualización automática, el asistente informará brevemente al usuario.

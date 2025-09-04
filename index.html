@@ -72,6 +72,9 @@
       <symbol id="i-redo" viewBox="0 0 24 24">
         <path fill="currentColor" d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 15.5c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/>
       </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 5 1.5-1.5-5-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </symbol>
       <symbol id="i-bold" viewBox="0 0 24 24">
         <path fill="currentColor" d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/>
       </symbol>
@@ -115,6 +118,7 @@
         <span class="divider"></span>
         <button id="undoBtn" class="btn" title="Deshacer (Ctrl+Z)"><svg class="icon"><use href="#i-undo"/></svg></button>
         <button id="redoBtn" class="btn" title="Rehacer (Ctrl+Y)"><svg class="icon"><use href="#i-redo"/></svg></button>
+        <button id="searchBtn" class="btn" title="Buscar (Ctrl+F)"><svg class="icon"><use href="#i-search"/></svg></button>
         <span class="divider"></span>
         <button id="boldBtn" class="btn" title="Negrita (Ctrl+B)"><svg class="icon"><use href="#i-bold"/></svg></button>
         <button id="italicBtn" class="btn" title="Cursiva (Ctrl+I)"><svg class="icon"><use href="#i-italic"/></svg></button>
@@ -152,6 +156,10 @@
         <label class="reading-select" title="Modo lectura">
           <input type="checkbox" id="readingToggle" />
           <span>Modo lectura</span>
+        </label>
+        <label class="reading-select" title="Modo edición">
+          <input type="checkbox" id="editingToggle" />
+          <span>Modo edición</span>
         </label>
       </div>
     </header>

@@ -1,4 +1,4 @@
-import { setupEditor, formatBold, formatItalic, formatCodeInline, insertCodeBlock, setHeading, toggleBulletList, toggleOrderedList, toggleTaskList, toggleQuote, insertLink, insertImage, insertHr, insertBlockMath, formatInlineMath, undo as editorUndo, redo as editorRedo, focusEditor } from './editor'
+import { setupEditor, formatBold, formatItalic, formatCodeInline, insertCodeBlock, setHeading, toggleBulletList, toggleOrderedList, toggleTaskList, toggleQuote, insertLink, insertImage, insertHr, insertBlockMath, formatInlineMath, undo as editorUndo, redo as editorRedo, focusEditor, openSearchInEditor } from './editor'
 import { setupPreview, renderMarkdown } from './preview'
 import { applyInitialTheme, setupThemeToggle } from './theme'
 import { exportAsHtml, printToPdf } from './export'
@@ -6,6 +6,7 @@ import { open, save, saveAs, setOnDropOpen, getCurrentContent, registerContentGe
 import 'katex/dist/katex.min.css'
 import { isTauri } from './utils/env'
 import { getVersion } from '@tauri-apps/api/app'
+import { appWindow } from '@tauri-apps/api/window'
 import { listen } from '@tauri-apps/api/event'
 import { invoke } from '@tauri-apps/api/tauri'
 import { open as openExternal } from '@tauri-apps/api/shell'
@@ -13,6 +14,7 @@ import { open as openExternal } from '@tauri-apps/api/shell'
 const filePathEl = document.getElementById('filePath') as HTMLSpanElement
 const wordCountEl = document.getElementById('wordCount') as HTMLSpanElement
 const READING_KEY = 'plumamd:reading'
+const EDITING_KEY = 'plumamd:editing'
 
 let currentContent = ''
 
@@ -31,20 +33,82 @@ async function main() {
   const editor = setupEditor(updatePreview)
   registerContentGetter(() => editor.get())
 
-  // Modo lectura (ocultar editor y que la vista previa ocupe todo)
+  // Intentar fijar icono de ventana desde el favicon (dev y build)
+  if (isTauri()) {
+    try {
+      const resp = await fetch('favicon.svg')
+      if (resp.ok) {
+        const svg = await resp.text()
+        const svgBlob = new Blob([svg], { type: 'image/svg+xml' })
+        const url = URL.createObjectURL(svgBlob)
+        await new Promise<void>((resolve, reject) => {
+          const img = new Image()
+          img.onload = () => {
+            try {
+              const size = 128
+              const canvas = document.createElement('canvas')
+              canvas.width = size
+              canvas.height = size
+              const ctx = canvas.getContext('2d')!
+              ctx.clearRect(0, 0, size, size)
+              // Dibujar SVG centrado y contenido
+              ctx.drawImage(img, 0, 0, size, size)
+              canvas.toBlob(async (blob) => {
+                try {
+                  if (!blob) return resolve()
+                  const ab = await blob.arrayBuffer()
+                  await appWindow.setIcon(new Uint8Array(ab))
+                } catch {}
+                resolve()
+              }, 'image/png')
+            } catch { resolve() }
+          }
+          img.onerror = () => resolve()
+          img.src = url
+        })
+        URL.revokeObjectURL(url)
+      }
+    } catch {}
+  }
+
+  // Modos de diseño: lectura y edición (excluyentes)
   const layoutEl = document.querySelector('.layout') as HTMLElement
   const readingToggle = document.getElementById('readingToggle') as HTMLInputElement | null
+  const editingToggle = document.getElementById('editingToggle') as HTMLInputElement | null
   const savedReading = localStorage.getItem(READING_KEY)
+  const savedEditing = localStorage.getItem(EDITING_KEY)
   const readingOn = savedReading === '1'
-  if (readingToggle) {
-    readingToggle.checked = readingOn
-    layoutEl.classList.toggle('reading-mode', readingOn)
-    readingToggle.addEventListener('change', () => {
-      const on = readingToggle.checked
-      layoutEl.classList.toggle('reading-mode', on)
-      localStorage.setItem(READING_KEY, on ? '1' : '0')
-    })
+  const editingOn = savedEditing === '1'
+
+  // Si ambos quedaron guardados por alguna versión anterior, prioriza edición
+  const initialMode = editingOn ? 'editing' : (readingOn ? 'reading' : 'split') as 'editing'|'reading'|'split'
+  layoutEl.classList.toggle('reading-mode', initialMode === 'reading')
+  layoutEl.classList.toggle('editing-mode', initialMode === 'editing')
+  if (readingToggle) readingToggle.checked = initialMode === 'reading'
+  if (editingToggle) editingToggle.checked = initialMode === 'editing'
+
+  const applyModes = (reading: boolean, editing: boolean) => {
+    // Exclusión mutua
+    if (reading && editing) editing = false
+    layoutEl.classList.toggle('reading-mode', reading)
+    layoutEl.classList.toggle('editing-mode', editing)
+    if (readingToggle) readingToggle.checked = reading
+    if (editingToggle) editingToggle.checked = editing
+    localStorage.setItem(READING_KEY, reading ? '1' : '0')
+    localStorage.setItem(EDITING_KEY, editing ? '1' : '0')
   }
+
+  readingToggle?.addEventListener('change', () => {
+    const reading = !!readingToggle.checked
+    const editing = false // apagar edición si se activa lectura
+    applyModes(reading, editing)
+  })
+
+  editingToggle?.addEventListener('change', () => {
+    const editing = !!editingToggle.checked
+    const reading = false // apagar lectura si se activa edición
+    applyModes(reading, editing)
+  })
 
   document.getElementById('openBtn')?.addEventListener('click', async () => {
     const res = await open()
@@ -240,6 +304,12 @@ async function main() {
 
   // Atajos
   window.addEventListener('keydown', async (e) => {
+    // Buscar: Ctrl/Cmd+F abre el buscador del editor
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'f') {
+      e.preventDefault()
+      openSearchInEditor()
+      return
+    }
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'o') {
       e.preventDefault()
       const res = await open()
@@ -294,6 +364,8 @@ async function main() {
   bind('hrBtn', () => insertHr())
   bind('mathInlineBtn', () => formatInlineMath())
   bind('mathBlockBtn', () => insertBlockMath())
+  const searchBtn = document.getElementById('searchBtn')
+  searchBtn?.addEventListener('click', () => { openSearchInEditor(); focusEditor() })
 
 }
 

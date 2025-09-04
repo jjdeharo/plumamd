@@ -1,6 +1,6 @@
 [package]
 name = "plumamd"
-version = "1.0.1"
+version = "1.1.0"
 description = "Editor Markdown con Tauri"
 authors = ["Juanjo"]
 edition = "2021"
@@ -12,7 +12,7 @@ tauri-build = { version = "^1.5", features = [] }
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tauri = { version = "^1.6", features = [ "fs-exists", "fs-remove-file",
+tauri = { version = "^1.6", features = [ "window-set-icon", "fs-exists", "fs-remove-file",
   "dialog-open",
   "dialog-save",
   "fs-read-file",

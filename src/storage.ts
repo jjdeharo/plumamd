@@ -11,11 +11,18 @@ export function getCurrentContent() {
 
 export async function open() {
   if (isTauri()) {
-    const selected = await openDialog({ filters: [{ name: 'Markdown', extensions: ['md', 'markdown', 'txt'] }] })
+    const selected = await openDialog({ multiple: false, filters: [{ name: 'Markdown', extensions: ['md', 'markdown', 'txt'] }] })
     if (!selected || Array.isArray(selected)) return null
-    const content = await readTextFile(selected as string)
-    currentPath = selected as string
-    return { path: currentPath, content }
+    const path = normalizePath(String(selected))
+    try {
+      const content = await readTextFile(path)
+      currentPath = path
+      return { path: currentPath, content }
+    } catch (e) {
+      console.error('Error al abrir archivo:', e)
+      alert('No se pudo abrir el archivo seleccionado. Comprueba permisos o que el archivo exista.')
+      return null
+    }
   } else {
     const input = document.createElement('input')
     input.type = 'file'
@@ -39,13 +46,16 @@ export async function open() {
 // Abre directamente desde una ruta del sistema (p.ej. pasada por el SO)
 export async function openFromPath(path: string) {
   // Normaliza posibles URLs tipo file://...
-  const normalized = path.startsWith('file://')
-    ? decodeURIComponent(new URL(path).pathname)
-    : path
+  const normalized = normalizePath(path)
   if (isTauri()) {
-    const content = await readTextFile(normalized)
-    currentPath = normalized
-    return { path: currentPath, content }
+    try {
+      const content = await readTextFile(normalized)
+      currentPath = normalized
+      return { path: currentPath, content }
+    } catch (e) {
+      console.error('Error al abrir por ruta:', normalized, e)
+      return null
+    }
   }
   return null
 }
@@ -127,4 +137,15 @@ export function setOnDropOpen(handler: (path: string, content: string) => void) 
 
 export function registerContentGetter(fn: () => string) {
   getContent = fn
+}
+
+function normalizePath(p: string): string {
+  try {
+    if (p.startsWith('file://')) {
+      const url = new URL(p)
+      // new URL().pathname ya viene decodificado salvo espacios; aplicamos decodeURIComponent por robustez
+      return decodeURIComponent(url.pathname)
+    }
+  } catch {}
+  return p
 }

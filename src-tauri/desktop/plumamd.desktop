@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=PlumaMD
+Comment=Editor Markdown sencillo para Linux
+Exec=plumamd %U
+TryExec=plumamd
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;
+StartupNotify=true
+Icon=/usr/share/icons/hicolor/512x512/apps/plumamd.png
+StartupWMClass=plumamd
+X-GNOME-StartupWMClass=plumamd
+MimeType=text/markdown;text/x-markdown;

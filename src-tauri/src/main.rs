@@ -1,4 +1,5 @@
 use tauri::{CustomMenuItem, Menu, Submenu, Manager};
+// (sin icono en Rust; se fija desde frontend)
 
 #[tauri::command]
 fn initial_args() -> Vec<String> {
@@ -29,7 +30,6 @@ fn main() {
     })
     .invoke_handler(tauri::generate_handler![initial_args])
     .setup(|_app| {
-      // Setup general sin emisión de eventos temprana
       Ok(())
     })
     .on_menu_event(|event| {

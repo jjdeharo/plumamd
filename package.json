@@ -1,6 +1,6 @@
 {
   "name": "plumamd",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "os": ["linux"],
@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build",
-    "tauri:build:desktop": "npm run tauri:build && node src-tauri/copy_desktop.cjs"
+    "tauri:build": "tauri build && node src-tauri/patch_deb.cjs",
+    "tauri:build:desktop": "npm run tauri:build && node src-tauri/patch_deb.cjs"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.10",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@codemirror/commands": "^6.8.1",
+    "@codemirror/search": "^6.5.6",
     "@codemirror/lang-markdown": "^6.2.4",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.26.3",
