@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlumaMD</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <script type="module" crossorigin src="./assets/index-Bq818pDI.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-D5ZjRHHQ.css">
+  </head>
+  <body>
+    <!-- Sprite de iconos SVG embebido -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+      <symbol id="i-open" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M19 20H5a2 2 0 0 1-2-2V8h2v10h14V8h2v10a2 2 0 0 1-2 2ZM12 4l4 4h-3v6h-2V8H8l4-4Z"/>
+      </symbol>
+      <symbol id="i-save" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M17 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-2-2Zm-5 14a3 3 0 1 1 0-6a3 3 0 0 1 0 6Zm3-9H7V5h8v3Z"/>
+      </symbol>
+      <symbol id="i-saveas" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M17 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7v-2H7V5h8v3h4V7l-2-2Z"/>
+        <path fill="currentColor" d="M18 14h-2v2h-2v2h2v2h2v-2h2v-2h-2v-2Z"/>
+      </symbol>
+      <symbol id="i-export" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 3l4 4h-3v6h-2V7H8l4-4Zm-7 9h2v7h10v-7h2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7Z"/>
+      </symbol>
+      <symbol id="i-print" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M17 3H7v4h10V3ZM7 17v4h10v-4H7Zm12-8H5a3 3 0 0 0-3 3v5h4v-3h12v3h4v-5a3 3 0 0 0-3-3Z"/>
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 3v9l3-3 1.4 1.4L12 16l-4.4-5.6L9 9l3 3V3h0Z"/>
+        <path fill="currentColor" d="M5 18h14v2H5z"/>
+      </symbol>
+      <symbol id="i-theme" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 2a10 10 0 1 0 7.07 17.07A8 8 0 0 1 12 2Z"/>
+      </symbol>
+      <symbol id="i-ul" viewBox="0 0 24 24">
+        <circle cx="5" cy="7" r="1.5" fill="currentColor"/>
+        <rect x="8" y="6" width="12" height="2" rx="1" fill="currentColor"/>
+        <circle cx="5" cy="12" r="1.5" fill="currentColor"/>
+        <rect x="8" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+        <circle cx="5" cy="17" r="1.5" fill="currentColor"/>
+        <rect x="8" y="16" width="12" height="2" rx="1" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-ol" viewBox="0 0 24 24">
+        <!-- Números 1, 2, 3 como texto para mayor claridad -->
+        <text x="5" y="8" font-size="6" text-anchor="middle" fill="currentColor">1</text>
+        <text x="5" y="13" font-size="6" text-anchor="middle" fill="currentColor">2</text>
+        <text x="5" y="18" font-size="6" text-anchor="middle" fill="currentColor">3</text>
+        <!-- Líneas de contenido -->
+        <rect x="8" y="6" width="12" height="2" rx="1" fill="currentColor"/>
+        <rect x="8" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+        <rect x="8" y="16" width="12" height="2" rx="1" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-task" viewBox="0 0 24 24">
+        <rect x="3" y="5" width="4" height="4" rx="0.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M4.2 7.2l1 1 1.8-1.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="8" y="6" width="12" height="2" rx="1" fill="currentColor"/>
+        <rect x="3" y="10" width="4" height="4" rx="0.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="8" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+        <rect x="3" y="15" width="4" height="4" rx="0.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="8" y="16" width="12" height="2" rx="1" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-quote" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M6 8h6v4H9v6H4V10a2 2 0 0 1 2-2Zm8 0h6v4h-3v6h-5V12a4 4 0 0 1 4-4Z"/>
+      </symbol>
+      <symbol id="i-code" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M8 7l-4 5 4 5v-3l-2-2 2-2V7zm8 0v3l2 2-2 2v3l4-5-4-5zm-6 3h4v4h-4v-4z"/>
+      </symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>
+      </symbol>
+      <symbol id="i-redo" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 15.5c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/>
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 5 1.5-1.5-5-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </symbol>
+      <symbol id="i-bold" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/>
+      </symbol>
+      <symbol id="i-italic" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/>
+      </symbol>
+      <symbol id="i-codeblock" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 18V6h16v12H4z"/>
+        <path fill="currentColor" d="M6 8h2v2H6zm3 0h9v2H9zm-3 3h2v2H6zm3 0h9v2H9zm-3 3h2v2H6zm3 0h9v2H9z"/>
+      </symbol>
+      <symbol id="i-link" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+      <symbol id="i-image" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+      </symbol>
+      <symbol id="i-hr" viewBox="0 0 24 24">
+        <rect x="4" y="11" width="16" height="2" rx="1" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-math" viewBox="0 0 24 24">
+        <!-- x -->
+        <path d="M8 11 L12 15 M12 11 L8 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <!-- superíndice 2 trazado como trazo continuo -->
+        <path d="M15.5 8 C17 7.5 18.5 8.2 18 9.3 C17.8 9.8 17.2 10.2 16.5 10.7 L15 12 H18.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-math-block" viewBox="0 0 24 24">
+        <!-- contenedor -->
+        <rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <!-- x dentro del bloque -->
+        <path d="M8.5 11.5 L12.5 15.5 M12.5 11.5 L8.5 15.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <!-- superíndice 2 dentro del bloque -->
+        <path d="M15.8 9.3 C17 8.9 18.2 9.4 18 10.3 C17.8 10.8 17.3 11.1 16.7 11.5 L15.3 12.7 H18.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+    </svg>
+    <header class="toolbar" role="toolbar" aria-label="Barra de herramientas">
+      <div class="left">
+        <strong class="brand">PlumaMD</strong>
+        <button id="openBtn" class="btn" aria-label="Abrir archivo (Ctrl+O)"><svg class="icon"><use href="#i-open"/></svg><span>Abrir</span></button>
+        <button id="saveBtn" class="btn keep-label" aria-label="Guardar (Ctrl+S)"><svg class="icon"><use href="#i-save"/></svg><span>Guardar</span></button>
+        <button id="saveAsBtn" class="btn keep-label" aria-label="Guardar como (Ctrl+Shift+S)"><svg class="icon"><use href="#i-saveas"/></svg><span>Guardar como</span></button>
+        <span class="divider"></span>
+        <button id="undoBtn" class="btn" title="Deshacer (Ctrl+Z)"><svg class="icon"><use href="#i-undo"/></svg></button>
+        <button id="redoBtn" class="btn" title="Rehacer (Ctrl+Y)"><svg class="icon"><use href="#i-redo"/></svg></button>
+        <button id="searchBtn" class="btn" title="Buscar (Ctrl+F)"><svg class="icon"><use href="#i-search"/></svg></button>
+        <span class="divider"></span>
+        <button id="boldBtn" class="btn" title="Negrita (Ctrl+B)"><svg class="icon"><use href="#i-bold"/></svg></button>
+        <button id="italicBtn" class="btn" title="Cursiva (Ctrl+I)"><svg class="icon"><use href="#i-italic"/></svg></button>
+        <button id="codeInlineBtn" class="btn" title="Código inline (Ctrl+`)"><svg class="icon"><use href="#i-code"/></svg><span>&lt;&gt;</span></button>
+        <button id="codeBlockBtn" class="btn" title="Bloque de código"><svg class="icon"><use href="#i-codeblock"/></svg></button>
+        <span class="divider"></span>
+        <button id="h1Btn" class="btn" title="Encabezado H1">H1</button>
+        <button id="h2Btn" class="btn" title="Encabezado H2">H2</button>
+        <button id="h3Btn" class="btn" title="Encabezado H3">H3</button>
+        <span class="divider"></span>
+        <button id="ulBtn" class="btn" title="Lista con viñetas"><svg class="icon"><use href="#i-ul"/></svg></button>
+        <button id="olBtn" class="btn" title="Lista numerada"><svg class="icon"><use href="#i-ol"/></svg></button>
+        <button id="taskBtn" class="btn" title="Lista de tareas"><svg class="icon"><use href="#i-task"/></svg></button>
+        <button id="quoteBtn" class="btn" title="Cita"><svg class="icon"><use href="#i-quote"/></svg></button>
+        <span class="divider"></span>
+        <button id="linkBtn" class="btn" title="Enlace"><svg class="icon"><use href="#i-link"/></svg></button>
+        <button id="imageBtn" class="btn" title="Imagen"><svg class="icon"><use href="#i-image"/></svg></button>
+        <button id="hrBtn" class="btn" title="Separador"><svg class="icon"><use href="#i-hr"/></svg></button>
+        <span class="divider"></span>
+        <button id="mathInlineBtn" class="btn" title="Fórmula inline"><svg class="icon"><use href="#i-math"/></svg></button>
+        <button id="mathBlockBtn" class="btn" title="Fórmula bloque"><svg class="icon"><use href="#i-math-block"/></svg></button>
+      </div>
+      <div class="right">
+        <button id="exportHtmlBtn" class="btn btn-primary" aria-label="Exportar a HTML (Ctrl+E)"><svg class="icon"><use href="#i-export"/></svg><span>Exportar</span></button>
+        <button id="printPdfBtn" class="btn btn-primary" aria-label="Imprimir a PDF (Ctrl+P)"><svg class="icon"><use href="#i-print"/></svg><span>PDF</span></button>
+        <button id="aboutBtn" class="btn" aria-label="Acerca de">Acerca</button>
+        <label class="theme-select" title="Tema">
+          <span style="font-weight:500">Tema</span>
+          <select id="themeSelect" aria-label="Selector de tema">
+            <option value="system">Sistema</option>
+            <option value="light">Claro</option>
+            <option value="dark">Oscuro</option>
+          </select>
+        </label>
+        <label class="reading-select" title="Modo lectura">
+          <input type="checkbox" id="readingToggle" />
+          <span>Modo lectura</span>
+        </label>
+        <label class="reading-select" title="Modo edición">
+          <input type="checkbox" id="editingToggle" />
+          <span>Modo edición</span>
+        </label>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section id="editor" class="pane" aria-label="Editor"></section>
+      <section id="preview" class="pane preview" aria-label="Vista previa"></section>
+    </main>
+
+    <footer class="status" aria-live="polite">
+      <span id="filePath">Sin título</span>
+      <span id="wordCount">0 palabras</span>
+    </footer>
+
+    <!-- Modal Acerca de -->
+    <div id="aboutModal" class="modal" aria-hidden="true" aria-labelledby="aboutTitle" role="dialog">
+      <div class="backdrop" data-close></div>
+      <div class="modal-content" role="document">
+        <header class="modal-header">
+          <h2 id="aboutTitle">Acerca de PlumaMD</h2>
+          <button class="btn close" id="aboutClose" aria-label="Cerrar">✕</button>
+        </header>
+        <section class="modal-body">
+          <p>
+            PlumaMD es un editor Markdown moderno y ligero con vista previa en tiempo real,
+            soporte de fórmulas con KaTeX y exportación a HTML. Ideal para apuntes y materiales didácticos.
+          </p>
+          <ul>
+            <li>Vista previa instantánea con tipografía cuidada</li>
+            <li>KaTeX: inline <code>$...$</code> y bloque <code>$$...$$</code></li>
+            <li>Exportación HTML autosuficiente (fuentes KaTeX incrustadas)</li>
+            <li>Atajos: abrir, guardar, exportar, imprimir</li>
+          </ul>
+          <p class="muted">Versión: <span id="appVersion">—</span></p>
+          <p class="muted">Proyecto: <a href="https://github.com/jjdeharo/plumamd" target="_blank" rel="noopener">github.com/jjdeharo/plumamd</a></p>
+          <p>
+            <button id="downloadFromAboutBtn" class="btn btn-primary" aria-label="Descargar versión de escritorio">
+              <svg class="icon"><use href="#i-download"/></svg>
+              <span>Descargar versión de escritorio</span>
+            </button>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Modal Descargas -->
+    <div id="downloadModal" class="modal" aria-hidden="true" aria-labelledby="downloadTitle" role="dialog">
+      <div class="backdrop" data-close></div>
+      <div class="modal-content" role="document">
+        <header class="modal-header">
+          <h2 id="downloadTitle">Descargar versión de escritorio (Linux)</h2>
+          <button class="btn close" id="downloadClose" aria-label="Cerrar">✕</button>
+        </header>
+        <section class="modal-body">
+          <p>Descarga la última versión estable para Linux. También puedes ver todas las descargas o leer las instrucciones de compilación.</p>
+          <p>
+            <a id="downloadPrimary" class="btn btn-primary" href="https://github.com/jjdeharo/plumamd/releases/latest" target="_blank" rel="noopener">
+              Descargar para Linux
+            </a>
+          </p>
+          <p id="releaseInfo" class="muted">Buscando última versión…</p>
+          <p>
+            <a class="btn" href="https://github.com/jjdeharo/plumamd/releases/latest" target="_blank" rel="noopener">Ver todas las descargas</a>
+            <a class="btn" href="https://github.com/jjdeharo/plumamd#instalaci%C3%B3n" target="_blank" rel="noopener">Instrucciones de instalación</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+  </body>
+  </html>
